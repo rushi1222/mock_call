@@ -5,11 +5,20 @@
 
 import SwiftUI
 import SwiftData
+import FirebaseCore
+import GoogleSignIn
 
 @main
 struct mock_callApp: App {
-    @State private var authManager = AuthManager()
+    @State private var authManager: AuthManager
     @State private var callManager = CallManager()
+
+    init() {
+        if AppConfig.useFirebaseAuth {
+            FirebaseApp.configure()
+        }
+        _authManager = State(initialValue: AuthManager())
+    }
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([CallerPreset.self, CallHistoryEntry.self])
@@ -22,6 +31,9 @@ struct mock_callApp: App {
             ContentView()
                 .environment(authManager)
                 .environment(callManager)
+                .onOpenURL { url in
+                    GIDSignIn.sharedInstance.handle(url)
+                }
         }
         .modelContainer(sharedModelContainer)
     }

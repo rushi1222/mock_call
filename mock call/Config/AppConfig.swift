@@ -19,6 +19,11 @@ enum AppConfig {
     /// Flip to false once LiveAPIClient is implemented and reachable.
     static let useMockAPIs = true
 
+    /// Firebase Auth (email/password, Google, Apple) replaces the mock
+    /// username/password login. Independent of useMockAPIs since the rest
+    /// of the API surface (ringtone catalog, etc.) has no backend yet.
+    static let useFirebaseAuth = true
+
     /// Placeholder — replace when useMockAPIs is false.
     static let apiBaseURL = URL(string: "https://api.example.com")!
 
